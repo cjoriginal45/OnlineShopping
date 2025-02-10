@@ -1,0 +1,14 @@
+{
+    "elements": {},
+    "attributes": {
+        "th:replace": {
+            "context": "div"
+        },
+        "th:href": {
+            "context": "link"
+        },
+        "type": {
+            "context": "label"
+        }
+    }
+}

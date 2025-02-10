@@ -1,0 +1,303 @@
+/* General */
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-body);
+    margin: 0;
+    --color-header: #feaf6b;
+    --color-body: #6b50ef;
+    --color-suave: color-mix(in srgb, #1b0783 70%, white 30%);
+    --color-fuerte: color-mix(in srgb, #1b0783 50%, black 50%);
+}
+
+/* HEADER */
+.custom-header {
+    display: flex;
+    flex-direction: column; /* Alinea logo y barra de búsqueda en columna */
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-header);
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* Logo */
+.custom-header__logo {
+    display: flex;
+    justify-content: flex-start;
+    margin-right: 120px;
+}
+
+.custom-header__logo img {
+    max-width: 70dvw;
+    max-height: 18dvh;
+    margin: 0;
+}
+
+/* Navegación principal */
+.custom-header__nav {
+    display: flex; /* Flexbox para alinear elementos */
+    justify-content: center; /* Centra enlaces horizontalmente */
+    align-items: center; /* Alinea enlaces verticalmente */
+    width: 100%; /* Ancho total */
+    gap: 25px; /* Espacio entre enlaces */
+    margin: 20px; /* Margen alrededor del contenedor */
+    position: relative; /* Para posicionar el borde */
+}
+
+/* Efecto hover en navegación */
+.custom-header__nav:hover {
+    color: var(--color-header);
+}
+
+/* Borde inferior en navegación */
+.custom-header__nav::after {
+    content: "";
+    position: absolute;
+    bottom: 0; /* Posición inferior */
+    left: 50%; /* Centrado horizontal */
+    transform: translateX(-51.5%); /* Ajusta la posición */
+    width: 100%; /* Ancho del borde */
+    border-bottom: 3px solid var(--color-header); /* Borde inferior */
+}
+
+/* Estilo de enlaces */
+.custom-header__nav .item__container {
+    color: var(--color-fuerte);
+    text-decoration: none;
+    padding: 10px;
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 30px;
+    max-width: 50%;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Espaciado y efectos de hover */
+.custom-header__nav .item__container .nav__items {
+    color: var(--color-fuerte);
+}
+
+.item__container {
+    display: flex;
+    align-items: center;
+}
+
+.item__container .nav__items {
+    padding: 7px;
+}
+
+.custom-header__nav .item__container:last-child {
+    margin-right: 30px;
+}
+
+.custom-header__nav .item__container:hover {
+    background-color: var(--color-fuerte);
+    color: var(--color-header);
+    text-decoration: none;
+    border-radius: 30px;
+}
+
+.custom-header__nav .item__container:hover .material-symbols-outlined {
+    color: var(--color-header); /* Ícono cambia de color */
+}
+
+.custom-header__nav .item__container:hover .nav__items {
+    color: var(--color-header); /* Texto cambia de color */
+}
+
+.nav__items {
+    text-decoration: none;
+}
+
+/* Barra de búsqueda */
+.busqueda-container {
+    width: 50%; /* Ajusta el ancho */
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Alinea verticalmente */
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Campo de entrada */
+.input-text {
+    width: 100%;
+    padding: 10px 15px 10px 40px; /* Espacio para el ícono */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 30px; /* Bordes redondeados */
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* Foco en barra de búsqueda */
+.input-text:focus {
+    border-color: var(--color-fuerte);
+}
+
+/* Ícono de búsqueda */
+.search-icon {
+    position: absolute;
+    left: 12px; /* Ajuste según el padding */
+    font-size: 20px;
+    color: #999;
+    pointer-events: none; /* No bloquea la interacción */
+}
+
+/* Contenedor de autocompletado */
+.search-autocomplete {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: none; /* Solo visible con sugerencias */
+}
+
+/* Contenedor del menú */
+.nav-container {
+    background-color: white;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor para logo y barra */
+.image-barra__container {
+    display: flex;
+    flex-direction: row; /* Elementos en línea */
+    justify-content: space-evenly; /* Espaciado uniforme */
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo opcional */
+}
+
+/* Checkbox escondido */
+input[type="checkbox"] {
+    display: none;
+}
+
+/* Estilo de login */
+.login {
+    display: flex;
+    flex-direction: row;
+    width: 20dvw;
+    gap: 20px;
+    align-items: center; /* Centro vertical */
+    margin-left: 150px;
+}
+
+.login__container,
+.register__container {
+    display: flex;
+    align-items: center; /* Centro vertical */
+    gap: 4.3px; /* Espacio entre ícono y texto */
+}
+
+.login__container a,
+.register__container a {
+    text-decoration: none;
+    color: var(--color-fuerte);
+    font-size: 1rem;
+}
+
+.login__container a:hover,
+.register__container a:hover {
+    text-decoration: underline;
+}
+
+/* Íconos de Material */
+.material-symbols-outlined {
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    color: var(--color-fuerte);
+}
+
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .custom-header__nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* Mostrar el menú cuando el checkbox está seleccionado */
+    #open-menu:checked + .image-barra__container + .nav-container .custom-header__nav {
+        display: flex;
+    }
+
+    /* Estilo del botón de hamburguesa */
+    .menu__container label {
+        font-size: 2rem;
+        cursor: pointer;
+        display: block;
+    }
+
+    /* Hacer el logo más pequeño para pantallas pequeñas */
+    .custom-header__logo img {
+        max-width: 50dvw; /* Ajuste al tamaño del logo */
+        max-height: 15dvh; /* Ajuste al tamaño del logo */
+    }
+
+    /* Barra de búsqueda: se reduce el tamaño en pantallas pequeñas */
+    .busqueda-container {
+        width: 70%; /* Barra de búsqueda más pequeña */
+    }
+
+    /* Los íconos de login se apilan en lugar de estar en una fila */
+    .login {
+        flex-direction: column;
+        gap: 10px;
+        margin-left: 0; /* Eliminar margen para alinearlo con el logo */
+    }
+
+    /* Estilo para los íconos dentro del menú */
+    .item__container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 15px 20px;
+    }
+
+    .item__container a {
+        font-size: 1rem;
+        color: var(--color-fuerte);
+    }
+
+    /* Cuando se pase el mouse sobre los elementos del menú */
+    .custom-header__nav .item__container:hover {
+        background-color: var(--color-fuerte);
+        color: var(--color-header);
+    }
+}
+
+/* Para pantallas más grandes, el menú se mantiene igual */
+@media screen and (min-width: 769px) {
+    .custom-header__nav {
+        display: flex;
+    }
+
+    .menu__container label {
+        display: none;
+    }
+}

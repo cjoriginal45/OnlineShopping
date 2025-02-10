@@ -1,0 +1,99 @@
+<link rel="stylesheet" type="text/css" th:href="@{/header.css}">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<header class="custom-header">
+
+    <div class="menu__container">
+        <input type="checkbox" id="open-menu">
+        <label class="material-symbols-outlined" for="open-menu" id="open">menu</label>
+    </div>
+
+    <div class="image-barra__container">
+
+        <a href="#" class="custom-header__logo">
+            <img src="logo.png" alt="Logo">
+        </a>
+
+        <div class="busqueda-container">
+            <!-- Contenedor de búsqueda -->
+            <div class="input-wrapper">
+                <!-- Ícono de búsqueda -->
+                <span class="material-symbols-outlined search-icon">search</span>
+                <!-- Campo de entrada -->
+                <input 
+                    id="search" 
+                    type="text" 
+                    name="q" 
+                    value="" 
+                    placeholder="Buscar..." 
+                    class="input-text" 
+                    maxlength="128" 
+                    role="combobox" 
+                    aria-haspopup="true"  
+                    aria-autocomplete="list"  
+                    aria-expanded="false"  
+                    autocomplete="off" 
+                    aria-controls="search_autocomplete"  
+                    >
+            </div>
+            <!-- Contenedor de autocompletado -->
+            <div id="search_autocomplete" class="search-autocomplete" style="display: none;"></div>
+        </div>
+
+
+        <div class="login">
+            <div class="login__container" id="login-link">
+                <a href="#">Ingresar</a>
+                <input type="checkbox" id="open-menu-login" style="display: none;">
+                <label class="material-symbols-outlined" for="open-menu-login">Login</label>
+            </div>
+
+            <div class="register__container" id="register-link">
+                <a href="#">Creá tu cuenta</a>
+                <input type="checkbox" id="open-menu-register" style="display: none;">
+                <label class="material-symbols-outlined" for="open-menu-register">person</label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav-container">
+
+        <nav class="custom-header__nav">
+            <div class="item__container">
+                <label class="material-symbols-outlined" for="open-menu-login">tv</label>
+                <a class="nav__items"  href="#inicio">TV</a>
+            </div> 
+
+            <div class="item__container">
+                <label class="material-symbols-outlined" for="open-menu-login">computer</label>    
+                <a class="nav__items" href="#contacto">Notebooks/PC</a>
+            </div>
+
+            <div class="item__container">
+                <label class="material-symbols-outlined" for="open-menu-login">Air_Purifier_Gen</label>      
+                <a class="nav__items" href="#acerca">Aires Acondicionados</a>
+            </div>    
+
+            <div class="item__container">
+                <label class="material-symbols-outlined" for="open-menu-login">Smartphone</label>     
+                <a class="nav__items" href="#acerca">Celulares/Tablets</a>
+            </div>
+
+            <div class="item__container">
+                <label class="material-symbols-outlined" for="open-menu-login">Videocam</label>      
+                <a class="nav__items" href="#acerca">Camaras/Seguridad</a>
+            </div>
+
+            <div class="item__container">
+                <label class="material-symbols-outlined" for="open-menu-login">Sports_Esports</label>
+                <a class="nav__items" href="#acerca">Gaming/Insumos</a>
+            </div>
+            <div class="item__container">
+                <label class="material-symbols-outlined" for="open-menu-login">Category</label>    
+                <a class="nav__items" href="#acerca">Otros</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+

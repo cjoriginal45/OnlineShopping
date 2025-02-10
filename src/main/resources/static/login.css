@@ -1,0 +1,276 @@
+/* Reseteamos los márgenes y el padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-body);
+    margin: 0;
+    --color-header: #feaf6b;
+    --color-body: #6b50ef;
+    --color-suave:color-mix(in srgb, #1b0783 70%, white 30%);
+    --color-fuerte:color-mix(in srgb,#1b0783 50%, black 50%);
+}
+
+/* HEADER */
+.custom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--color-header);
+    color: white;
+    position:static;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    max-width: 100vw; /* Asegura que el header no se desborde */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* Para asegurarse de que no se agregue espacio adicional */
+    flex-wrap: wrap;
+}
+
+/* Logo */
+.custom-header__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.custom-header__logo img {
+    margin-right: 10px;
+    max-width: 70dvw;
+    max-height: 14dvh;
+}
+
+.custom-header__nav{
+    margin: 10px;
+}
+
+.custom-header__nav a {
+    color: var(--color-fuerte);
+    text-decoration: none;
+    padding: 10px 20px;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 30px;
+    margin-right: 20px; /* Agrega espacio entre los enlaces */
+}
+
+/* El último enlace no tendrá margen derecho */
+.custom-header__nav a:last-child {
+    margin-right: 0;
+}
+
+
+
+.custom-header__nav a:hover {
+    background-color: var(--color-fuerte);
+    color: var(--color-header);
+    padding: 20px;
+    text-decoration: none;
+    border-radius: 30px;
+}
+
+/* Estilo del formulario */
+.form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 16px 8px 0 0 var(--color-suave);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    margin: 40px auto; /* Centra el formulario en la pantalla */
+}
+
+.form h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color:var(--color-fuerte);
+    font-size: 30px;
+}
+
+/* Contenedor del formulario */
+.form__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.form__form label {
+    margin-bottom: 10px;
+    font-weight: normal;
+    align-self: center;
+    margin-left: 10px;
+    font-family: sans-serif;
+    font-size: medium;
+    color: rgb(33, 32, 32);
+}
+
+.form__form input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 12%;
+}
+
+.form__form input::placeholder {
+    color: rgba(21, 21, 21, 0.667);
+}
+
+/* Estilo para el botón */
+button {
+    width: 90%; /* Asegura que el botón ocupe todo el ancho disponible */
+    padding: 10px;
+    background-color: var(--color-fuerte);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    font-size: 16px; /* Asegura que el tamaño del texto en el botón sea consistente */
+}
+
+button:hover {
+    background-color: var(--color-suave);
+    color: white;
+}
+
+.form__input-container {
+    text-align: center;
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.form_register-container {
+    text-align: center;
+}
+
+.form_register-container p {
+    margin-bottom: 5px; /* Espaciado entre el texto y el enlace */
+}
+
+.form_register-container a {
+    color: var(--color-body);
+    text-decoration: none;
+}
+
+.form_register-container a:visited {
+    color: var(--color-body); /* El color no cambia en el estado visitado */
+    text-decoration: none; /* Evita el subrayado */
+}
+
+.form_register-container a:hover {
+    color: var(--color-header); /* Color suave al pasar el mouse */
+    text-decoration: none; /* Evita el subrayado al pasar el mouse */
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    border: 1px solid var(--color-body);
+    border-radius: 8px;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+    border-color: var(--color-suave);
+    outline: none;
+}
+
+/* Media query para diseño en rejilla */
+@media (min-width: 53rem) {
+    .form__form {
+        display: grid;
+        grid-template-areas:
+            "nombre nombre"
+            "email email"
+            "password password"
+            "submit submit"
+            "register register";
+        column-gap: 20px;
+        row-gap: 15px;
+        justify-content: center;
+    }
+
+    .form__form div:nth-child(1) {
+        grid-area: nombre;
+    }
+
+    .form__form div:nth-child(2) {
+        grid-area: email;
+    }
+
+    .form__form div:nth-child(3) {
+        grid-area: password;
+    }
+
+    .form__form div:nth-child(4) {
+        grid-area: submit;
+        display: flex;
+        justify-content: center;
+    }
+
+    .form__form div:nth-child(5) {
+        grid-area: register;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .form__input-container{
+        margin: 0;
+    }
+
+    .form_register-container p {
+        margin: 0;
+        margin-bottom: 3px; /* Espaciado entre el texto y el enlace */
+    }
+
+    .form_register-container a {
+        color: #1b0783;
+        text-decoration: none;
+    }
+
+    .form_register-container a:hover {
+        color: #6248e4;
+    }
+
+
+    .form__input-container button{
+        margin:0;
+    }
+}
+
+/* Media query para diseño en columna */
+@media (max-width: 52rem) {
+    .form__form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .form__form label {
+        width: 100%;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    .form__form input, button {
+        width: 100%;
+        max-width: 350px;
+        box-sizing: border-box;
+    }
+}
