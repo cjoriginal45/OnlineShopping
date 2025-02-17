@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Catalogo</title>
+        <link rel="stylesheet" th:href="@{/catalogo.css}" href="catalogo.css">
+    </head>
+    <body>   
+
+        <div id="header_container"></div>
+
+        <h1 id="categoria-titulo"></h1>
+
+        <div id="productos-container" class="productos-container"></div>
+
+        <!-- Controles de paginación -->
+        <div class="pagination">
+            <button id="prevPage">⏪ Anterior</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Siguiente ⏩</button>
+        </div>
+
+
+    </body>
+</html>
+
+
+
+
+
+<script>
+    // Función para cargar el archivo header.html
+
+    fetch('/OnlineShopping/header')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header_container').innerHTML = data;
+            })
+            .catch(error => {
+                console.error("Error al cargar el header:", error);
+            });
+</script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Esperar a que el header se cargue antes de buscar el input
+        setTimeout(() => {
+            const inputBusqueda = document.getElementById("search");
+            if (!inputBusqueda)
+                return; // Evitar errores si no existe
+
+            inputBusqueda.addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    let filtro = inputBusqueda.value.trim();
+                    if (filtro.length > 0) {
+                        buscarProductosDesdeAPI(filtro);
+                    } else {
+                        cargarProductosIniciales(); // Reiniciar paginación
+                    }
+                }
+            });
+        }, 500); // Esperar 500ms para que el header se cargue
+
+        function buscarProductosDesdeAPI(filtro) {
+            fetch(`http://localhost:6060/OnlineShopping/products/api/catalogo?busqueda=${encodeURIComponent(filtro)}`)
+                .then(response => response.json())
+                .then(data => {
+                    mostrarProductosBusqueda(data.content);
+                    actualizarPaginacionBusqueda(data);
+                })
+                .catch(error => console.error("Error al buscar productos:", error));
+        }
+
+        function mostrarProductosBusqueda(productos) {
+            const productosContainer = document.getElementById("productos-container");
+            productosContainer.innerHTML = ""; // Limpiar productos previos
+            productos.forEach(producto => {
+                productosContainer.innerHTML += `
+                    <div class="producto-box">
+                        <img src=${producto.imagen}>
+                        <h3>${producto.nombre}</h3>
+                        <p>${producto.descripcion}</p>
+                        <h4> $${producto.precio}</h4>
+                        <button class="button">Añadir al carrito</button>
+                        <button class="button">Comprar ahora</button>
+                    </div>
+                `;
+            });
+        }
+
+        function cargarProductosIniciales() {
+            fetch(`http://localhost:6060/OnlineShopping/products/api/catalogo?page=0&size=8`)
+                .then(response => response.json())
+                .then(data => {
+                    mostrarProductosBusqueda(data.content);
+                    actualizarPaginacionBusqueda(data);
+                })
+                .catch(error => console.error("Error al cargar productos:", error));
+        }
+
+        function actualizarPaginacionBusqueda(data) {
+            const pageInfo = document.getElementById("pageInfo");
+            const prevPageButton = document.getElementById("prevPage");
+            const nextPageButton = document.getElementById("nextPage");
+
+            if (!pageInfo || !prevPageButton || !nextPageButton) {
+                console.error("No se encontraron los elementos de paginación.");
+                return;
+            }
+
+            pageInfo.innerText = `Página ${data.number + 1} de ${data.totalPages}`;
+            prevPageButton.disabled = data.first;
+            nextPageButton.disabled = data.last;
+        }
+    });
+</script>
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentPage = 0; // Página actual
+        const size = 8; // Productos por página
+
+        // Obtener la categoría desde la URL
+        const params = new URLSearchParams(window.location.search);
+        let categoria = params.get("categoria") || ""; // Si no hay categoría, se mantiene vacío
+        console.log("Categoría seleccionada:", categoria);
+
+        // Mostrar la categoría en el título
+        const categoriaTitulo = document.getElementById("categoria-titulo");
+        if (categoriaTitulo) {
+            categoriaTitulo.innerText = `Categoría: ${categoria}`;
+        }
+
+        // Escuchar clics en los enlaces de categorías
+        document.querySelectorAll(".categoria-link").forEach(enlace => {
+            enlace.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                // Actualizar la categoría con la nueva seleccionada
+                categoria = this.getAttribute("data-category");
+                console.log("Nueva categoría seleccionada:", categoria);
+
+                // Actualizar la URL en el navegador
+                history.pushState({}, "", `catalogo.html?categoria=${encodeURIComponent(categoria)}`);
+
+                // Actualizar el título de la categoría
+                if (categoriaTitulo) {
+                    categoriaTitulo.innerText = `Categoría: ${categoria}`;
+                }
+
+                // Reiniciar la paginación a la primera página
+                currentPage = 0;
+
+                // Vuelve a cargar los productos con la nueva categoría
+                cargarProductosCategoria();
+            });
+        });
+
+        // Función para cargar productos (todos o por categoría)
+        function cargarProductosCategoria() {
+            let url;
+            if (categoria) {
+                // Cargar productos por categoría
+                url = `http://localhost:6060/OnlineShopping/products/api/catalogo?categoria=${encodeURIComponent(categoria)}&page=${currentPage}&size=${size}`;
+            } else {
+                // Cargar todos los productos
+                url = `http://localhost:6060/OnlineShopping/products/api/catalogo?page=${currentPage}&size=${size}`;
+            }
+            console.log("Solicitando:", url);
+
+            fetch(url, {
+                headers: {
+                    "Cache-Control": "no-cache"
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error en la solicitud: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Datos recibidos:", data);
+                    if (data.content) {
+                        mostrarProductosCategoria(data.content);
+                        actualizarPaginacionCategoria(data);
+                    } else {
+                        console.error("Estructura de datos incorrecta:", data);
+                    }
+                })
+                .catch(error => console.error("Error al cargar productos:", error));
+        }
+
+        // Función para mostrar productos en el contenedor
+        function mostrarProductosCategoria(productos) {
+            console.log("Productos a mostrar:", productos);
+            const productosContainer = document.getElementById("productos-container");
+
+            if (!productosContainer) {
+                console.error("No se encontró el contenedor de productos.");
+                return;
+            }
+
+            // Limpiar el contenedor antes de agregar nuevos productos
+            while (productosContainer.firstChild) {
+                productosContainer.removeChild(productosContainer.firstChild);
+            }
+
+            if (productos.length === 0) {
+                const mensaje = document.createElement("p");
+                mensaje.innerText = "No hay productos disponibles.";
+                productosContainer.appendChild(mensaje);
+                return;
+            }
+
+            productos.forEach(producto => {
+                const productoHTML = document.createElement("div");
+                productoHTML.classList.add("producto-box");
+                productoHTML.innerHTML = `
+                    <img src="${producto.imagen}" alt="${producto.nombre}">
+                    <h3>${producto.nombre}</h3>
+                    <p>${producto.descripcion}</p>
+                    <h4> $${producto.precio}</h4>
+                    <button class="button">Añadir al carrito</button>
+                    <button class="button">Comprar ahora</button>
+                `;
+                productosContainer.appendChild(productoHTML);
+            });
+        }
+
+        // Función para actualizar la paginación
+        function actualizarPaginacionCategoria(data) {
+            const pageInfo = document.getElementById("pageInfo");
+            const prevPageButton = document.getElementById("prevPage");
+            const nextPageButton = document.getElementById("nextPage");
+
+            if (!pageInfo || !prevPageButton || !nextPageButton) {
+                console.error("No se encontraron los elementos de paginación.");
+                return;
+            }
+
+            pageInfo.innerText = `Página ${data.number + 1} de ${data.totalPages}`;
+            prevPageButton.disabled = data.first;
+            nextPageButton.disabled = data.last;
+        }
+
+        // Eventos de paginación
+        document.getElementById("prevPage").addEventListener("click", () => {
+            if (currentPage > 0) {
+                currentPage--;
+                cargarProductosCategoria();
+            }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", () => {
+            currentPage++;
+            cargarProductosCategoria();
+        });
+
+        // Cargar productos al iniciar
+        cargarProductosCategoria();
+    });
+</script>
+

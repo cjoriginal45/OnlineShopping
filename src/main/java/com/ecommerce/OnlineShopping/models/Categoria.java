@@ -1,6 +1,7 @@
 
 package com.ecommerce.OnlineShopping.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-class Categoria {
+public class Categoria {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +25,7 @@ class Categoria {
     private String descripcion;
     
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.PERSIST)
+    @JsonIgnore
     private List<Producto> productos;
 
     public Categoria() {

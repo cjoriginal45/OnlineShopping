@@ -1,0 +1,142 @@
+:root{
+    --color-main: #feaf6b;
+    --color-body: #6b50ef;
+    --color-suave: color-mix(in srgb, #1b0783 70%, white 30%);
+    --color-fuerte: color-mix(in srgb, #1b0783 50%, black 50%);
+    --color-main-fuerte:#fb9c4a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background-color: var(--color-body);
+    margin: auto;
+    box-sizing: border-box;
+}
+
+.productos-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+    gap: 50px;
+    padding: 10px;
+    margin: 0;
+    width: 98%;
+    align-self: center;
+}
+
+.producto-box {
+    width: 100%;
+    max-height: 450px; /* Ajusta según sea necesario */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 1px solid transparent;
+    background-color: white;
+    text-align: center;
+    border-radius: 15px;
+    padding:5px;
+}
+
+h1{
+    margin: 0;
+}
+
+.producto-box p{
+    margin:auto;
+    padding: 8px;
+}
+
+
+.producto-box:hover {
+    border: 1px solid var(--color-suave);
+}
+
+
+.producto-box img {
+    width: 80%; /* Se ajusta al ancho del contenedor */
+    height: 130px; /* Altura fija para todas las imágenes */
+    object-fit: contain; /* Mantiene la proporción sin recortar */
+    border-radius: 5px;
+}
+
+.producto-box img:hover{
+    animation:aumentar_imagen 0.5s linear forwards;
+}
+
+.producto-box h3, p{
+    color: var(--color-fuerte);
+}
+
+.button{
+    color: var(--color-fuerte);
+    background-color: white;
+    max-width: 70%;
+    height: 35px;
+    margin: 6px;
+    border: 1px solid var(--color-body);
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 550;
+}
+
+.button:hover{
+    color: var(--color-fuerte);
+    background-color: var(--color-main);
+    border: 1px solid var(--color-main);
+}
+
+
+.pagination {
+    text-align: center;
+    margin: 20px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    border: 1px solid white;
+    color: var(--color-fuerte);
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: var(--color-main-fuerte);
+    color:var(--color-fuerte);
+    border: 1px solid var(--color-main);
+}
+
+.button:last-child{
+    color: white;
+    background-color: var(--color-fuerte);
+    border:1px solid transparent;
+}
+
+
+.button:last-child:hover{
+    color: var(--color-fuerte);
+    background-color: var(--color-main);
+    border:1px solid transparent;
+}
+
+h4{
+    font-size: 20px;
+    margin: 3px;
+    padding: 5px;
+    color:#04011a;
+}
+
+@keyframes aumentar_imagen {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}

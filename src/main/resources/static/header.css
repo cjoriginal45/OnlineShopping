@@ -16,12 +16,18 @@ header {
 /* HEADER */
 .custom-header {
     display: flex;
-    flex-direction: column; /* Alinea logo y barra de búsqueda en columna */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--color-header);
     width: 100%;
     flex-wrap: wrap;
+    margin: 0;
+}
+
+.nav-container{
+    margin: 0;
+    padding: 0;
 }
 
 /* Logo */
@@ -39,51 +45,41 @@ header {
 
 /* Navegación principal */
 .custom-header__nav {
-    display: flex; /* Flexbox para alinear elementos */
-    justify-content: center; /* Centra enlaces horizontalmente */
-    align-items: center; /* Alinea enlaces verticalmente */
-    width: 100%; /* Ancho total */
-    gap: 25px; /* Espacio entre enlaces */
-    margin: 20px; /* Margen alrededor del contenedor */
-    position: relative; /* Para posicionar el borde */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+    margin:0;
+    position: relative;
 }
 
-/* Efecto hover en navegación */
-.custom-header__nav:hover {
-    color: var(--color-header);
-}
-
-/* Borde inferior en navegación */
 .custom-header__nav::after {
     content: "";
     position: absolute;
-    bottom: 0; /* Posición inferior */
-    left: 50%; /* Centrado horizontal */
-    transform: translateX(-51.5%); /* Ajusta la posición */
-    width: 100%; /* Ancho del borde */
-    border-bottom: 3px solid var(--color-header); /* Borde inferior */
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    border-bottom: 3px solid var(--color-header);
 }
 
-/* Estilo de enlaces */
 .custom-header__nav .item__container {
     color: var(--color-fuerte);
     text-decoration: none;
     padding: 10px;
+    padding-right: 15px;
     position: relative;
     display: inline-flex;
     flex-direction: row;
     transition: color 0.3s ease, background-color 0.3s ease;
     border-radius: 30px;
     max-width: 50%;
-    margin-bottom: 10px;
+    margin-bottom: 0;
     text-transform: uppercase;
     font-size: 13px;
     font-weight: bold;
-}
-
-/* Espaciado y efectos de hover */
-.custom-header__nav .item__container .nav__items {
-    color: var(--color-fuerte);
+    padding-top: 5px;
 }
 
 .item__container {
@@ -92,7 +88,11 @@ header {
 }
 
 .item__container .nav__items {
-    padding: 7px;
+    padding: 11px;
+    padding-bottom: 4px;
+    text-decoration: none;
+    color: var(--color-fuerte);
+
 }
 
 .custom-header__nav .item__container:last-child {
@@ -106,24 +106,17 @@ header {
     border-radius: 30px;
 }
 
-.custom-header__nav .item__container:hover .material-symbols-outlined {
-    color: var(--color-header); /* Ícono cambia de color */
-}
-
+.custom-header__nav .item__container:hover .material-symbols-outlined,
 .custom-header__nav .item__container:hover .nav__items {
-    color: var(--color-header); /* Texto cambia de color */
-}
-
-.nav__items {
-    text-decoration: none;
+    color: var(--color-header);
 }
 
 /* Barra de búsqueda */
 .busqueda-container {
-    width: 50%; /* Ajusta el ancho */
+    width: 50%;
     display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Alinea verticalmente */
+    justify-content: center;
+    align-items: center;
 }
 
 .input-wrapper {
@@ -133,32 +126,28 @@ header {
     width: 100%;
 }
 
-/* Campo de entrada */
 .input-text {
     width: 100%;
-    padding: 10px 15px 10px 40px; /* Espacio para el ícono */
+    padding: 10px 15px 10px 40px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 30px; /* Bordes redondeados */
+    border-radius: 30px;
     outline: none;
     transition: border-color 0.3s ease;
 }
 
-/* Foco en barra de búsqueda */
 .input-text:focus {
     border-color: var(--color-fuerte);
 }
 
-/* Ícono de búsqueda */
 .search-icon {
     position: absolute;
-    left: 12px; /* Ajuste según el padding */
+    left: 12px;
     font-size: 20px;
     color: #999;
-    pointer-events: none; /* No bloquea la interacción */
+    pointer-events: none;
 }
 
-/* Contenedor de autocompletado */
 .search-autocomplete {
     position: absolute;
     top: 100%;
@@ -168,10 +157,9 @@ header {
     border: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 10;
-    display: none; /* Solo visible con sugerencias */
+    display: none;
 }
 
-/* Contenedor del menú */
 .nav-container {
     background-color: white;
     width: 100%;
@@ -179,16 +167,14 @@ header {
     padding: 0;
 }
 
-/* Contenedor para logo y barra */
 .image-barra__container {
     display: flex;
-    flex-direction: row; /* Elementos en línea */
-    justify-content: space-evenly; /* Espaciado uniforme */
+    flex-direction: row;
+    justify-content: space-evenly;
     width: 100%;
-    max-width: 1200px; /* Ancho máximo opcional */
+    max-width: 1200px;
 }
 
-/* Checkbox escondido */
 input[type="checkbox"] {
     display: none;
 }
@@ -199,15 +185,15 @@ input[type="checkbox"] {
     flex-direction: row;
     width: 20dvw;
     gap: 20px;
-    align-items: center; /* Centro vertical */
+    align-items: center;
     margin-left: 150px;
 }
 
 .login__container,
 .register__container {
     display: flex;
-    align-items: center; /* Centro vertical */
-    gap: 4.3px; /* Espacio entre ícono y texto */
+    align-items: center;
+    gap: 4.3px;
 }
 
 .login__container a,
@@ -222,14 +208,12 @@ input[type="checkbox"] {
     text-decoration: underline;
 }
 
-/* Íconos de Material */
 .material-symbols-outlined {
     line-height: 1;
     display: flex;
     align-items: center;
     color: var(--color-fuerte);
 }
-
 
 /* Responsive */
 @media screen and (max-width: 768px) {
@@ -239,37 +223,31 @@ input[type="checkbox"] {
         width: 100%;
     }
 
-    /* Mostrar el menú cuando el checkbox está seleccionado */
     #open-menu:checked + .image-barra__container + .nav-container .custom-header__nav {
         display: flex;
     }
 
-    /* Estilo del botón de hamburguesa */
     .menu__container label {
         font-size: 2rem;
         cursor: pointer;
         display: block;
     }
 
-    /* Hacer el logo más pequeño para pantallas pequeñas */
     .custom-header__logo img {
-        max-width: 50dvw; /* Ajuste al tamaño del logo */
-        max-height: 15dvh; /* Ajuste al tamaño del logo */
+        max-width: 50dvw;
+        max-height: 15dvh;
     }
 
-    /* Barra de búsqueda: se reduce el tamaño en pantallas pequeñas */
     .busqueda-container {
-        width: 70%; /* Barra de búsqueda más pequeña */
+        width: 70%;
     }
 
-    /* Los íconos de login se apilan en lugar de estar en una fila */
     .login {
         flex-direction: column;
         gap: 10px;
-        margin-left: 0; /* Eliminar margen para alinearlo con el logo */
+        margin-left: 0;
     }
 
-    /* Estilo para los íconos dentro del menú */
     .item__container {
         width: 100%;
         display: flex;
@@ -283,15 +261,8 @@ input[type="checkbox"] {
         font-size: 1rem;
         color: var(--color-fuerte);
     }
-
-    /* Cuando se pase el mouse sobre los elementos del menú */
-    .custom-header__nav .item__container:hover {
-        background-color: var(--color-fuerte);
-        color: var(--color-header);
-    }
 }
 
-/* Para pantallas más grandes, el menú se mantiene igual */
 @media screen and (min-width: 769px) {
     .custom-header__nav {
         display: flex;

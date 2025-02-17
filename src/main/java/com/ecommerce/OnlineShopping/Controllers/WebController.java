@@ -28,4 +28,9 @@ public class WebController {
         // Devuelve la vista "register.html" ubicada en la carpeta `templates`.
         // Sirve como la página de registro para nuevos usuarios.
     }
+    
+    @GetMapping("/catalogo")
+    public String showProducts() {
+        return "catalogo";
+    }
 }

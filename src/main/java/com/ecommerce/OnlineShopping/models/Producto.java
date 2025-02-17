@@ -1,8 +1,10 @@
 package com.ecommerce.OnlineShopping.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,15 +29,18 @@ public class Producto {
     private Integer stock;
     @Column(nullable = false, length = 80)
     private String descripcion;
+    @Column
+    private String imagen;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
+    @JsonBackReference
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<DetallePedido> detalles;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemCarrito> items;
 
     public Producto() {
@@ -54,7 +59,7 @@ public class Producto {
         this.items = items;
     }
 
-    public Producto(Integer idProducto, String nombre, Double precio, Integer stock, String descripcion, Categoria categoria) {
+    public Producto(Integer idProducto, String nombre, Double precio, Integer stock, String descripcion, Categoria categoria, String imagen) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.precio = precio;
@@ -63,7 +68,22 @@ public class Producto {
         this.categoria = categoria;
         this.detalles = null;
         this.items = null;
+        this.imagen = imagen;
     }
+
+    public Producto(Integer idProducto, String nombre, Double precio, Integer stock, String descripcion, String imagen, Categoria categoria, List<DetallePedido> detalles, List<ItemCarrito> items) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.categoria = categoria;
+        this.detalles = null;
+        this.items = null;
+    }
+    
+    
 
     public Integer getIdProducto() {
         return idProducto;
@@ -128,5 +148,15 @@ public class Producto {
     public void setItems(List<ItemCarrito> items) {
         this.items = items;
     }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+    
+    
 
 }
