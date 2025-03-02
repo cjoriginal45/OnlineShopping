@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Catalogo</title>
+        <link rel="stylesheet" th:href="@{/catalogo.css}" href="catalogo.css">
+    </head>
+    <body>
+
+        <div id="header_container"></div>
+        <div id="productos-container" class="productos-container"></div>
+
+        <!-- Controles de paginación -->
+        <div class="pagination">
+            <button id="prevPage">Anterior</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Siguiente</button>
+        </div>
+
+        <div id="footer-container"></div>
+
+        
+        <script src="header.js" th:src="@{/header.js}" ></script>
+        <script>
+
+            // Cargar el footer
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch('/OnlineShopping/footer')
+                        .then(response => response.text())
+                        .then(data => {
+                            let footerContainer = document.getElementById('footer-container');
+                            if (footerContainer) {
+                                footerContainer.innerHTML = data;
+                            } else {
+                                console.error("No se encontró el contenedor del footer.");
+                            }
+                        })
+                        .catch(error => console.error("Error al cargar el footer:", error));
+            });
+
+
+            // En tu archivo JavaScript del catálogo (o en la consola del navegador)
+            fetch("http://localhost:6060/OnlineShopping/users/check", {
+                credentials: "include" // ¡IMPORTANTE! Para enviar cookies de sesión.
+            })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Respuesta del servidor:", data); // Debe mostrar { authenticated: true/false }
+                        console.log("sessionStorage:", sessionStorage.getItem("userLoggedIn")); // Verifica el estado en el cliente
+                    })
+                    .catch(error => console.error("Error:", error));
+            
+
+            // Búsqueda de productos
+            document.addEventListener("DOMContentLoaded", function () {
+                setTimeout(() => {
+                    const inputBusqueda = document.getElementById("search");
+                    if (!inputBusqueda)
+                        return;
+
+                    inputBusqueda.addEventListener("keydown", function (event) {
+                        if (event.key === "Enter") {
+                            event.preventDefault();
+                            let filtro = inputBusqueda.value.trim();
+                            if (filtro.length > 0) {
+                                buscarProductosDesdeAPI(filtro);
+                            } else {
+                                cargarProductosIniciales();
+                            }
+                        }
+                    });
+                }, 500);
+
+                function buscarProductosDesdeAPI(filtro) {
+                    fetch(`http://localhost:6060/OnlineShopping/products/api/catalogo?busqueda=${encodeURIComponent(filtro)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                mostrarProductosBusqueda(data.content);
+                                actualizarPaginacionBusqueda(data);
+                            })
+                            .catch(error => console.error("Error al buscar productos:", error));
+                }
+
+                function mostrarProductosBusqueda(productos) {
+                    const productosContainer = document.getElementById("productos-container");
+                    while (productosContainer.firstChild) {
+                        productosContainer.removeChild(productosContainer.firstChild);
+                    }
+                    productos.forEach(producto => {
+                        productosContainer.innerHTML += `
+                            <div class="producto-box">
+                                 <a href="/OnlineShopping/product/${producto.nombre}">
+                                <img src="${producto.imagen}" alt="${producto.nombre}">
+                                <h3>${producto.nombre}</h3>
+                                <p>${producto.descripcion}</p>
+                                </a>
+                                <h4> $${producto.precio}</h4>
+                                <button class="button">Añadir al carrito</button>
+                                <button class="button">Comprar ahora</button>
+                            </div>
+                        `;
+                    });
+                }
+
+                function cargarProductosIniciales() {
+                    fetch(`http://localhost:6060/OnlineShopping/products/api/catalogo?page=0&size=8`)
+                            .then(response => response.json())
+                            .then(data => {
+                                mostrarProductosBusqueda(data.content);
+                                actualizarPaginacionBusqueda(data);
+                            })
+                            .catch(error => console.error("Error al cargar productos:", error));
+                }
+
+                function actualizarPaginacionBusqueda(data) {
+                    document.getElementById("pageInfo").innerText = `Página ${data.number + 1} de ${data.totalPages}`;
+                    document.getElementById("prevPage").disabled = data.first;
+                    document.getElementById("nextPage").disabled = data.last;
+                }
+            });
+
+            // Manejo de categorías y paginación
+            document.addEventListener("DOMContentLoaded", function () {
+                let currentPage = 0;
+                const size = 8;
+
+                const params = new URLSearchParams(window.location.search);
+                let categoria = params.get("categoria") || "";
+
+                document.querySelectorAll(".categoria-link").forEach(enlace => {
+                    enlace.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        categoria = this.getAttribute("data-category");
+                        history.pushState({}, "", `catalogo.html?categoria=${encodeURIComponent(categoria)}`);
+                        currentPage = 0;
+                        cargarProductosCategoria();
+                    });
+                });
+
+                function cargarProductosCategoria() {
+                    let url = categoria
+                            ? `http://localhost:6060/OnlineShopping/products/api/catalogo?categoria=${encodeURIComponent(categoria)}&page=${currentPage}&size=${size}`
+                            : `http://localhost:6060/OnlineShopping/products/api/catalogo?page=${currentPage}&size=${size}`;
+
+                    fetch(url, {headers: {"Cache-Control": "no-cache"}})
+                            .then(response => {
+                                if (!response.ok)
+                                    throw new Error("Error en la solicitud: " + response.statusText);
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.content) {
+                                    mostrarProductosCategoria(data.content);
+                                    actualizarPaginacionCategoria(data);
+                                } else {
+                                    console.error("Estructura de datos incorrecta:", data);
+                                }
+                            })
+                            .catch(error => console.error("Error al cargar productos:", error));
+                }
+
+                function mostrarProductosCategoria(productos) {
+                    const productosContainer = document.getElementById("productos-container");
+                    while (productosContainer.firstChild) {
+                        productosContainer.removeChild(productosContainer.firstChild);
+                    }
+
+                    if (productos.length === 0) {
+                        const mensaje = document.createElement("p");
+                        mensaje.innerText = "No hay productos disponibles.";
+                        productosContainer.appendChild(mensaje);
+                        return;
+                    }
+
+
+                    productos.forEach(producto => {
+                        const productoHTML = document.createElement("div");
+                        productoHTML.classList.add("producto-box");
+                        productoHTML.innerHTML = `
+                            <a href="/OnlineShopping/product/${producto.nombre}">
+                            <img src="${producto.imagen}" alt="${producto.nombre}">
+                            <h3>${producto.nombre}</h3>
+                            <p>${producto.descripcion}</p>
+                            </a>
+                            <h4> $${producto.precio}</h4>
+                            <button class="button">Añadir al carrito</button>
+                            <button class="button">Comprar ahora</button>
+                        `;
+                        productosContainer.appendChild(productoHTML);
+                    });
+                }
+
+                function actualizarPaginacionCategoria(data) {
+                    document.getElementById("pageInfo").innerText = `Página ${data.number + 1} de ${data.totalPages}`;
+                    document.getElementById("prevPage").disabled = data.first;
+                    document.getElementById("nextPage").disabled = data.last;
+                }
+
+                document.getElementById("prevPage").addEventListener("click", () => {
+                    if (currentPage > 0) {
+                        currentPage--;
+                        cargarProductosCategoria();
+                    }
+                });
+
+                document.getElementById("nextPage").addEventListener("click", () => {
+                    currentPage++;
+                    cargarProductosCategoria();
+                });
+
+                cargarProductosCategoria();
+            });
+        </script>
+    </body>
+</html>

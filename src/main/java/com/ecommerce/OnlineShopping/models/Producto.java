@@ -31,6 +31,16 @@ public class Producto {
     private String descripcion;
     @Column
     private String imagen;
+    @Column
+    private String marca;
+    @Column
+    private int garantia;
+    @Column
+    private String modelo;
+    @Column
+    private String color;
+    @Column
+    private String origen;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
@@ -59,17 +69,24 @@ public class Producto {
         this.items = items;
     }
 
-    public Producto(Integer idProducto, String nombre, Double precio, Integer stock, String descripcion, Categoria categoria, String imagen) {
+    public Producto(Integer idProducto, String nombre, Double precio, Integer stock, String descripcion, String imagen, String marca, int garantia, String modelo, String color, String origen, Categoria categoria) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.marca = marca;
+        this.garantia = garantia;
+        this.modelo = modelo;
+        this.color = color;
+        this.origen = origen;
         this.categoria = categoria;
         this.detalles = null;
         this.items = null;
-        this.imagen = imagen;
     }
+
+    
 
     public Producto(Integer idProducto, String nombre, Double precio, Integer stock, String descripcion, String imagen, Categoria categoria, List<DetallePedido> detalles, List<ItemCarrito> items) {
         this.idProducto = idProducto;
@@ -78,6 +95,23 @@ public class Producto {
         this.stock = stock;
         this.descripcion = descripcion;
         this.imagen = imagen;
+        this.categoria = categoria;
+        this.detalles = null;
+        this.items = null;
+    }
+
+    public Producto(Integer idProducto, String nombre, Double precio, Integer stock, String descripcion, String imagen, String marca, int garantia, String modelo, String color, String origen, Categoria categoria, List<DetallePedido> detalles, List<ItemCarrito> items) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.descripcion = descripcion;
+        this.imagen = imagen;
+        this.marca = marca;
+        this.garantia = garantia;
+        this.modelo = modelo;
+        this.color = color;
+        this.origen = origen;
         this.categoria = categoria;
         this.detalles = null;
         this.items = null;
@@ -156,7 +190,46 @@ public class Producto {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
-    
-    
 
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public int getGarantia() {
+        return garantia;
+    }
+
+    public void setGarantia(int garantia) {
+        this.garantia = garantia;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
+     
+    
 }

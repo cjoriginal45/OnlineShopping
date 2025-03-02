@@ -1,0 +1,137 @@
+:root {
+    --color-main: #feaf6b;
+    --color-body: #6b50ef;
+    --color-suave: color-mix(in srgb, #1b0783 70%, white 30%);
+    --color-fuerte: color-mix(in srgb, #1b0783 50%, black 50%);
+    --color-main-fuerte: #fb9c4a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.footer {
+    margin: 0;
+    padding: 20px 0;
+    background-color: var(--color-main);
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+/* Redes Sociales */
+.social-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-links__label {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-fuerte);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.social-links__networks-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-links__logo {
+    width: 40px;
+    height: 40px;
+    filter: invert(14%) sepia(96%) saturate(3294%) hue-rotate(248deg) brightness(62%) contrast(121%);
+}
+
+.social-links__logo:hover {
+    filter: none;/* Restaura el color original al pasar el mouse */
+}
+
+/* Sobre nosotros y Contacto */
+.about-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 200px;
+}
+
+.about-links__label {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-fuerte);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.about-links__item {
+    padding: 5px;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+.links,
+.links-contact {
+    font-size: 13px;
+    color: var(--color-fuerte);
+    text-align: center;
+}
+
+.links:hover,
+.links-contact:hover {
+    text-decoration: underline;
+}
+
+/* Iconos de contacto */
+.material-symbols-outlined {
+    margin-right: 5px;
+    color: var(--color-fuerte);
+}
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .social-links__networks-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .social-links__logo {
+        width: 35px;
+        height: 35px;
+    }
+
+    .about-links {
+        min-width: 100%;
+    }
+
+    .about-links__label {
+        font-size: 16px;
+    }
+
+    .links,
+    .links-contact {
+        font-size: 12px;
+    }
+}

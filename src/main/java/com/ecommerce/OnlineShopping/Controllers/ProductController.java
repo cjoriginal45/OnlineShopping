@@ -1,23 +1,18 @@
 package com.ecommerce.OnlineShopping.Controllers;
 
-import com.ecommerce.OnlineShopping.Services.CategoriaService;
+import com.ecommerce.OnlineShopping.DTO.DetallesProductoDTO;
+import com.ecommerce.OnlineShopping.Repositories.MarcaRepository;
 import com.ecommerce.OnlineShopping.Services.ProductService;
-import com.ecommerce.OnlineShopping.models.Categoria;
 import com.ecommerce.OnlineShopping.models.Producto;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,13 +25,16 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     
+    @Autowired
+    private MarcaRepository marcaRepository;
+
     @GetMapping("/api/catalogo")
     public ResponseEntity<Page<Producto>> listarProductos(
-            @RequestParam(defaultValue = "0") int page, 
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "8") int size,
-            @RequestParam(required = false) String categoria, 
+            @RequestParam(required = false) String categoria,
             @RequestParam(required = false) String busqueda) {
-        
+
         Page<Producto> productos;
         Pageable pageable = PageRequest.of(page, size);
 
@@ -51,49 +49,45 @@ public class ProductController {
         return ResponseEntity.ok(productos);
     }
 
-     /*
-    @GetMapping("/catalogo")
-    public ResponseEntity<?> listarProductos(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
+    @GetMapping("/api/product/{name}")
+    public ResponseEntity<?> mostrarProducto(@PathVariable String name) {
+        if (name == null) {
+            return ResponseEntity.badRequest().body("Nombre inválido");
+        }
+
         try {
-            Categoria categoriaElectronicos = new Categoria(1, "Electrónicos", "producto electronico");
-            Categoria categoriaHogar = new Categoria(2, "Hogar", "producto hogar");
+            System.out.println("Buscando producto con nombre: " + name);
+            Optional<Producto> producto = productService.obtenerPorNombre(name);
 
-            List<Producto> productosSimulados = Arrays.asList(
-                    new Producto(1, "Laptop Gamer", 1200.99, 10, "Laptop potente para gaming", categoriaElectronicos),
-                    new Producto(2, "Smartphone", 899.99, 15, "Smartphone de última generación", categoriaElectronicos),
-                    new Producto(3, "Audífonos", 59.99, 20, "Audífonos con cancelación de ruido", categoriaElectronicos),
-                    new Producto(4, "Monitor 27''", 300.50, 8, "Monitor Full HD para oficina", categoriaElectronicos),
-                    new Producto(5, "Silla de Oficina", 250.00, 5, "Silla ergonómica de oficina", categoriaHogar),
-                    new Producto(6, "Mesa de Madera", 150.00, 7, "Mesa de comedor en madera", categoriaHogar),
-                    new Producto(7, "Refrigerador", 1100.00, 4, "Refrigerador con congelador grande", categoriaHogar),
-                    new Producto(8, "Horno Eléctrico", 90.00, 10, "Horno eléctrico de 30 litros", categoriaHogar),
-                    new Producto(9, "Ventilador", 80.00, 12, "Ventilador de torre silencioso", categoriaHogar),
-                    new Producto(10, "Lámpara LED", 25.00, 30, "Lámpara LED de escritorio", categoriaHogar)
-            );
-
-            // Validaciones
-            if (size <= 0 || page < 0) {
-                return ResponseEntity.badRequest().body("Los valores de paginación no son válidos.");
+            System.out.println(producto.get().getMarca());
+            
+            if (producto.isEmpty()) {
+                System.out.println("Producto no encontrado");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado");
             }
-
-            int totalProductos = productosSimulados.size();
-            int start = page * size;
-
-            if (start >= totalProductos) {
-                return ResponseEntity.ok(new PageImpl<>(Collections.emptyList(), PageRequest.of(page, size), totalProductos));
+            
+            if (producto.isPresent()) {
+                DetallesProductoDTO detallesDTO;
+                detallesDTO = new DetallesProductoDTO(
+                        producto.get().getNombre(),
+                        producto.get().getPrecio(),
+                        producto.get().getGarantia(),
+                        producto.get().getMarca(),
+                        producto.get().getModelo(),
+                        producto.get().getColor(),
+                        producto.get().getOrigen(),
+                        producto.get().getCategoria().getNombre(),
+                        producto.get().getStock(),
+                        producto.get().getImagen(),
+                        producto.get().getDescripcion());
+                detallesDTO.obtenerImagenMarca(marcaRepository,producto.get().getMarca());
+                return ResponseEntity.ok(detallesDTO);
+            } else {
+                return ResponseEntity.badRequest().build();
             }
-
-            int end = Math.min(start + size, totalProductos);
-            List<Producto> pageContent = productosSimulados.subList(start, end);
-
-            Page<Producto> productosPage = new PageImpl<>(pageContent, PageRequest.of(page, size), totalProductos);
-            return ResponseEntity.ok(productosPage);
         } catch (Exception e) {
-            e.printStackTrace(); // Muestra el error en la consola
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error en el servidor");
         }
     }
-    */
+
 }

@@ -2,7 +2,6 @@ package com.ecommerce.OnlineShopping.Services;
 
 import com.ecommerce.OnlineShopping.Repositories.ProductRepository;
 import com.ecommerce.OnlineShopping.models.Producto;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +24,14 @@ public class ProductService {
 
     public Page<Producto> buscarPorNombre(String nombre, Pageable pageable) {
         return productRepository.findByNombreContainingIgnoreCase(nombre, pageable);
+    }
+    
+    public Optional<Producto> obtenerPorId(Integer id){
+        return productRepository.findById(id);
+    }
+
+    public Optional<Producto> obtenerPorNombre(String name) {
+        return productRepository.findByName(name);
     }
 
 }

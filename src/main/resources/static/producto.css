@@ -1,0 +1,273 @@
+:root {
+    --color-main: #feaf6b;
+    --color-body: #6b50ef;
+    --color-suave: color-mix(in srgb, #1b0783 70%, white 30%);
+    --color-fuerte: color-mix(in srgb, #1b0783 50%, black 50%);
+    --color-main-fuerte: #fb9c4a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#header_container, #footer_container img{
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    opacity: 1 !important;
+}
+
+body {
+    background-color: var(--color-suave);
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Container principal */
+.principal_container {
+    display: flex;
+    flex-direction: column; /* Cambia a columna en móviles */
+    height: auto; /* Ajusta la altura automáticamente */
+    background-color: white;
+    width: 101.7vw;
+}
+
+/* Contenedor de imagen */
+.image_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; /* Color de fondo temporal para visualización */
+    height: auto; /* Ajusta la altura automáticamente */
+    padding: 20px; /* Añade espacio alrededor de la imagen */
+}
+
+.image_container .image-product {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 30px;
+}
+
+/* Contenedor de descripción y detalles */
+.details_description_container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+/* Contenedor de detalles */
+.details_container {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.details_container h1 {
+    color: var(--color-fuerte);
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.details_container p {
+    color: black;
+    font-size: x-large;
+}
+
+.details_container .marca {
+    max-width: 150px;
+    max-height: 70px;
+    margin: 0;
+    padding: 0;
+}
+
+.details_container .button {
+    color: var(--color-fuerte);
+    background-color: white;
+    width: 50%;
+    height: 35px;
+    margin: 6px;
+    border: 1px solid var(--color-body);
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 550;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: 10px;
+    margin-top: 20px;
+}
+
+.details_container .button:hover {
+    color: var(--color-fuerte);
+    background-color: var(--color-main);
+    border: 1px solid var(--color-main);
+}
+
+.details_container .button:last-child {
+    color: white;
+    background-color: var(--color-fuerte);
+    border: 1px solid transparent;
+}
+
+.details_container .button:last-child:hover {
+    color: var(--color-fuerte);
+    background-color: var(--color-main);
+    border: 1px solid transparent;
+}
+
+/* Contenedor de descripción */
+.description_container {
+    flex: 1;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 30px;
+}
+
+.description_container p {
+    color: var(--color-fuerte);
+    text-align: center;
+    margin: 0;
+    font-size: 15px;
+}
+
+.description_container h4 {
+    margin-bottom: 10px;
+}
+
+/* Contenedor de envío */
+.envio_container {
+    display: flex;
+    flex-direction: row;
+}
+
+.envio_container label {
+    margin: 0;
+    align-self: center;
+    color: black;
+}
+
+.envio_container p {
+    color: black;
+    margin-left: 6px;
+    font-size: 16px;
+}
+
+/* Ficha técnica */
+.tecnichal_container {
+    background-color: white;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px; /* Añadir un poco de espacio interno */
+    margin-top: 15px;
+}
+
+.tecnichal_container h2 {
+    color: var(--color-fuerte);
+    margin-bottom: 20px; /* Espacio debajo del título */
+    text-align: center;
+}
+
+.tecnichal_container table {
+    width: 100%; /* La tabla ocupa el 100% del ancho en móviles */
+    border-collapse: collapse; /* Elimina el espacio entre celdas */
+    background-color: var(--color-body);
+}
+
+.tecnichal_container table td {
+    padding: 10px; /* Espacio interno en las celdas */
+    border: 2px solid white; /* Borde para las celdas */
+    text-align: right; /* Alineación del texto */
+}
+
+.tecnichal_container table td:first-child {
+    font-weight: bold; /* Hace que la primera columna (etiquetas) sea negrita */
+    background-color: white; /* Color de fondo para la primera columna */
+    color: var(--color-fuerte); /* Color del texto para la primera columna */
+    width: 45%;
+}
+
+.tecnichal_container table td:last-child {
+    background-color: var(--color-body); /* Color de fondo para la segunda columna */
+    color: white; /* Color del texto para la segunda columna */
+    text-align: left;
+    width: 100%;
+}
+
+/* Media queries para tablets y pantallas más grandes */
+@media (min-width: 900px) {
+    .principal_container {
+        flex-direction: row; /* Vuelve a la dirección de fila en tablets y desktop */
+        height: 105vh; /* Restaura la altura */
+    }
+
+    .image_container {
+        height: 100vh; /* Restaura la altura */
+        padding: 0; /* Elimina el padding adicional */
+        flex: 1; /* Ocupa la mitad del espacio */
+    }
+
+    .details_description_container {
+        flex: 1; /* Ocupa la otra mitad del espacio */
+        display: flex;
+        flex-direction: column; /* Mantén la dirección en columna */
+        height: 100vh; /* Asegura que ocupe toda la altura */
+    }
+
+    .details_container {
+        flex: 1; /* Ocupa la mitad superior del details_description_container */
+        padding: 20px; /* Restaura el padding */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .description_container {
+        flex: 1; /* Ocupa la mitad inferior del details_description_container */
+        padding: 10px; /* Restaura el padding */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .tecnichal_container table {
+        width: 80%; /* Reduce el ancho de la tabla en tablets */
+    }
+}
+
+@media (min-width: 1024px) {
+    .tecnichal_container table {
+        width: 50%; /* Restaura el ancho de la tabla en desktop */
+    }
+}
+
+/* Ajustes adicionales para móviles pequeños */
+@media (max-width: 480px) {
+    .details_container h1 {
+        font-size: 1.5rem; /* Reduce el tamaño del título en móviles pequeños */
+    }
+
+    .details_container p {
+        font-size: 1rem; /* Reduce el tamaño del texto en móviles pequeños */
+    }
+
+    .details_container .button {
+        width: 80%; /* Aumenta el ancho de los botones en móviles pequeños */
+    }
+
+    .description_container p {
+        font-size: 0.9rem; /* Reduce el tamaño del texto en móviles pequeños */
+    }
+
+    .tecnichal_container table td {
+        padding: 8px; /* Reduce el padding de las celdas en móviles pequeños */
+    }
+}

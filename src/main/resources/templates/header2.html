@@ -40,19 +40,17 @@
         </div>
 
 
-        <div class="login" id="login">
-            <div class="login__container" id="login-link">
-                <a href="/OnlineShopping/login">Ingresar</a>
-                <input type="checkbox" id="open-menu-login" style="display: none;">
-                <label class="material-symbols-outlined" for="open-menu-login">Login</label>
-            </div>
-
-            <div class="register__container" id="register-link">
-                <a href="/OnlineShopping/register">Creá tu cuenta</a>
-                <input type="checkbox" id="open-menu-register" style="display: none;">
-                <label class="material-symbols-outlined" for="open-menu-register">person</label>
-            </div>
+       <div class="account-dropdown">
+        <button class="account-button">
+            Mi cuenta <span class="material-symbols-outlined">arrow_drop_down</span>
+        </button>
+        <div class="dropdown-content">
+            <a href="/OnlineShopping/carrito">Carrito</a>
+            <a href="/OnlineShopping/historial">Historial de compras</a>
+            <a href="/OnlineShopping/configuracion">Configuración de cuenta</a>
+            <a href="/OnlineShopping/logout" id="logout-link">Cerrar sesión</a>
         </div>
+    </div>
 
     </div>
 
@@ -87,5 +85,3 @@
         </nav>
     </div>
 </header>
-
-

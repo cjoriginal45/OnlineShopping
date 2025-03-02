@@ -57,28 +57,25 @@
                 const password = document.getElementById('password').value;
 
                 try {
-                    const response = await fetch('http://localhost:6060/OnlineShopping/users/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            username: username, 
-                            email:email, 
-                            password:password}),
+                    const response = await fetch("http://localhost:6060/OnlineShopping/users/login", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({username, email, password}),
+                        credentials: "include" // Para enviar y recibir cookies
                     });
 
-                    if (response.ok) {
-                        window.location.href = '/OnlineShopping/principal'; // Redirige a la página principal
-                    } else if (response.status === 401) {
-                        // Credenciales inválidas
-                        errorDiv.textContent = 'Credenciales inválidas. Inténtalo de nuevo.';
+                    const data = await response.json(); // Parsear la respuesta JSON
+                    console.log("Respuesta del servidor:", data); // Verifica la respuesta
+
+                    if (data.authenticated) {
+                        sessionStorage.setItem("userLoggedIn", "true"); // Guardar estado en sessionStorage
+                        window.location.href = "/OnlineShopping/catalogo"; // Redirigir a la página principal
                     } else {
-                        // Otros errores
-                        errorDiv.textContent = 'Error en el servidor. Inténtalo más tarde.';
+                        alert("Credenciales incorrectas");
                     }
                 } catch (error) {
-                    errorDiv.textContent = 'No se pudo conectar con el servidor.';
+                    console.error("Error:", error);
+                    alert("No se pudo conectar con el servidor");
                 }
             });
         </script>

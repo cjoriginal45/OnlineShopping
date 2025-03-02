@@ -49,7 +49,7 @@ header {
     justify-content: center;
     align-items: center;
     width: 100%;
-    gap: 20px;
+    gap: 15px;
     margin:0;
     position: relative;
 }
@@ -68,7 +68,7 @@ header {
     color: var(--color-fuerte);
     text-decoration: none;
     padding: 10px;
-    padding-right: 15px;
+    padding-right: 6px;
     position: relative;
     display: inline-flex;
     flex-direction: row;
@@ -167,6 +167,11 @@ header {
     padding: 0;
 }
 
+.nav-list{
+    display: flex;
+    gap: 15px;
+}
+
 .image-barra__container {
     display: flex;
     flex-direction: row;
@@ -209,10 +214,19 @@ input[type="checkbox"] {
 }
 
 .material-symbols-outlined {
-    line-height: 1;
     display: flex;
     align-items: center;
     color: var(--color-fuerte);
+    margin:0;
+    padding: 0;
+    gap:0;
+}
+
+.categoria-link{
+    margin:0;
+    padding: 0;
+    display: flex;
+    gap: 0;
 }
 
 /* Responsive */
@@ -271,4 +285,61 @@ input[type="checkbox"] {
     .menu__container label {
         display: none;
     }
+}
+
+
+
+.account-dropdown {
+    position: relative;
+    display: inline-block;
+    margin: auto;
+}
+.account-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--color-fuerte);
+    justify-content: center;
+    border-radius: 13px;
+    width: 100px;
+}
+
+.account-button .material-symbols-outlined{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.account-button .material-symbols-outlined:hover{
+    color: var(--color-header);
+
+}
+
+.account-button:hover {
+    background-color: var(--color-fuerte);
+    color: var(--color-header);
+
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+.dropdown-content a {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: var(--color-fuerte);
+}
+.dropdown-content a:hover {
+    background-color: var(--color-fuerte);
+    color: var(--color-header);
+}
+.account-dropdown:hover .dropdown-content {
+    display: block;
 }

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Productos</title>
+        <link rel="stylesheet" href="producto.css" th:href="@{/producto.css}">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="header_container"></div>
+
+        <main>
+            <div class="principal_container">
+                <div class="image_container" id="image_container"></div>
+                <div class="details_description_container">
+                    <div class="details_container" id="details_container"></div>
+                    <div class="description_container" id="description_container"></div>
+                </div>
+            </div>
+
+            <div class="tecnichal_container" id="tecnichal_container"></div>
+            <div class="related_products" id="related_products"></div>
+        </main>
+
+        <div id="footer_container"></div>
+        
+        
+        <script src="header.js" th:src="@{/header.js}" ></script>
+        
+        <script>
+
+            // Cargar el footer
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch('/OnlineShopping/footer')
+                        .then(response => response.text())
+                        .then(data => {
+                            console.log("Header cargado:", data);
+                            let footerContainer = document.getElementById('footer_container');
+                            if (footerContainer) {
+                                footerContainer.innerHTML = data;
+                            } else {
+                                console.error("No se encontró el contenedor del footer.");
+                            }
+                        })
+                        .catch(error => console.error("Error al cargar el footer:", error));
+            });
+
+
+            // Cargar los detalles del producto
+            document.addEventListener("DOMContentLoaded", function () {
+                // Obtener el segmento de la URL
+                const pathname = window.location.pathname;
+                const pathParts = pathname.split("/"); // Dividir por "/"
+                const productName = decodeURIComponent(pathParts[pathParts.length - 1]); // Último segmento
+
+                if (productName) {
+                    fetch(`http://localhost:6060/OnlineShopping/products/api/product/${encodeURIComponent(productName)}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Producto no encontrado");
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                mostrarDetallesProducto(data);
+                            })
+                            .catch(error => console.error("Error al cargar los detalles del producto:", error));
+                }
+            });
+
+            function mostrarDetallesProducto(producto) {
+                console.log("Producto recibido:", producto); // <-- Verificar contenido
+                const imageContainer = document.getElementById("image_container");
+                const detailsContainer = document.getElementById("details_container");
+                const descriptionContainer = document.getElementById("description_container");
+                const tecnichalContainer = document.getElementById("tecnichal_container");
+
+
+                // Si producto es undefined o null, detener la ejecución
+                if (!producto) {
+                    console.error("Error: El objeto producto es undefined o null.");
+                    return;
+                }
+
+                // Mostrar la imagen del producto
+                imageContainer.innerHTML = `<img src="${producto.imagen}" alt="${producto.modelo}">`;
+
+
+
+
+                // Mostrar los detalles del producto
+                detailsContainer.innerHTML = `
+                    <h1>${producto.nombre}</h1>
+                    <img src="${producto.imagenMarca}" alt="${producto.marca}" class="marca">
+                    <div class="envio_container">
+                        <label class="material-symbols-outlined" for="open-menu-login">Local_Shipping</label>
+                        <p>Envío a domicilio</p>
+                    </div>
+                    <p>$${producto.precio}</p>
+                    <button class="button">Añadir al carrito</button>
+                    <button class="button">Comprar ahora</button>
+                `;
+
+                // Mostrar la descripción del producto
+                descriptionContainer.innerHTML = `
+                    <h4>Descripción</h4>
+                    <p>${producto.descripcion}</p>
+                `;
+
+                // Mostrar la ficha técnica del producto
+                tecnichalContainer.innerHTML = `
+                    <h2>Ficha Técnica</h2>
+                    <table>
+                        <tr>
+                            <td>Garantía</td>
+                            <td>${producto.garantia} meses</td>
+                        </tr>
+                        <tr>
+                            <td>Marca</td>
+                            <td>${producto.marca}</td>
+                        </tr>
+                        <tr>
+                            <td>Modelo</td>
+                            <td>${producto.modelo}</td>
+                        </tr>
+                        <tr>
+                            <td>Color</td>
+                            <td>${producto.color}</td>
+                        </tr>
+                        <tr>
+                            <td>Origen</td>
+                            <td>${producto.origen}</td>
+                        </tr>
+                        <tr>
+                            <td>Categoría</td>
+                            <td>${producto.categoria}</td>
+                        </tr>
+                        <tr>
+                            <td>Stock</td>
+                            <td>${producto.stock}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+        </script>
+    </body>
+</html>

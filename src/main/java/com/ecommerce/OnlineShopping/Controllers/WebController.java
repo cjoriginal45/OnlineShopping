@@ -33,4 +33,24 @@ public class WebController {
     public String showProducts() {
         return "catalogo";
     }
+    
+    @GetMapping("/header")
+    public String getHeader() {
+        return "header";  // Spring buscará header.html en templates/
+    }
+    
+     @GetMapping("/header2")
+    public String getHeader2() {
+        return "header2";  // Spring buscará header.html en templates/
+    }
+    
+     @GetMapping("/footer")
+    public String getFooter() {
+        return "footer";  // Spring buscará header.html en templates/
+    }
+    
+    @GetMapping("/product/{nombre}")
+    public String getProduct(){
+        return "producto";
+    }
 }

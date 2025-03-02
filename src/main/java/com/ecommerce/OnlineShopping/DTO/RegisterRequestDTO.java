@@ -1,10 +1,10 @@
 
-package com.ecommerce.OnlineShopping.models;
+package com.ecommerce.OnlineShopping.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class RegisterRequest {
+public class RegisterRequestDTO {
     @JsonProperty("username")
     private String username;
     @JsonProperty("email")
@@ -16,7 +16,7 @@ public class RegisterRequest {
     @JsonProperty("postalCode")
     private int postalCode;
 
-    public RegisterRequest(String username, String email, String password, String direccion, int postalCode) {
+    public RegisterRequestDTO(String username, String email, String password, String direccion, int postalCode) {
         this.username = username;
         this.email = email;
         this.password = password;

@@ -3,7 +3,7 @@ package com.ecommerce.OnlineShopping.Services;
 import com.ecommerce.OnlineShopping.Repositories.UserRepository;
 import com.ecommerce.OnlineShopping.models.Administrador;
 import com.ecommerce.OnlineShopping.models.Cliente;
-import com.ecommerce.OnlineShopping.models.RegisterRequest;
+import com.ecommerce.OnlineShopping.DTO.RegisterRequestDTO;
 import com.ecommerce.OnlineShopping.models.Usuario;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -141,7 +141,7 @@ public class UserService {
     }
      */
 
-    public void registerUser(RegisterRequest registerRequest) throws Exception {
+    public void registerUser(RegisterRequestDTO registerRequest) throws Exception {
 
         System.out.println("Datos recibidos: " + registerRequest.toString());
 
