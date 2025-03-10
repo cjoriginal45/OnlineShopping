@@ -34,4 +34,8 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
+    public Producto save(Producto product) {
+        return productRepository.save(product);
+    }
+
 }

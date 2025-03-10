@@ -53,4 +53,14 @@ public class WebController {
     public String getProduct(){
         return "producto";
     }
+    
+    @GetMapping("/producto/{id}")
+    public String getProducto(){
+        return "compra";
+    }
+    
+    @GetMapping("/headerSimple")
+    public String getHeaderSimple(){
+        return "headerSimple";
+    }
 }

@@ -20,10 +20,8 @@
 
         <div id="footer-container"></div>
 
-        
-        <script src="header.js" th:src="@{/header.js}" ></script>
+        <script src="header.js" th:src="@{/header.js}"></script>
         <script>
-
             // Cargar el footer
             document.addEventListener("DOMContentLoaded", function () {
                 fetch('/OnlineShopping/footer')
@@ -39,8 +37,7 @@
                         .catch(error => console.error("Error al cargar el footer:", error));
             });
 
-
-            // En tu archivo JavaScript del catálogo (o en la consola del navegador)
+            // Verificar autenticación del usuario
             fetch("http://localhost:6060/OnlineShopping/users/check", {
                 credentials: "include" // ¡IMPORTANTE! Para enviar cookies de sesión.
             })
@@ -50,7 +47,6 @@
                         console.log("sessionStorage:", sessionStorage.getItem("userLoggedIn")); // Verifica el estado en el cliente
                     })
                     .catch(error => console.error("Error:", error));
-            
 
             // Búsqueda de productos
             document.addEventListener("DOMContentLoaded", function () {
@@ -87,19 +83,42 @@
                     while (productosContainer.firstChild) {
                         productosContainer.removeChild(productosContainer.firstChild);
                     }
+
                     productos.forEach(producto => {
-                        productosContainer.innerHTML += `
-                            <div class="producto-box">
-                                 <a href="/OnlineShopping/product/${producto.nombre}">
+                        const productoHTML = document.createElement("div");
+                        productoHTML.classList.add("producto-box");
+
+                        productoHTML.innerHTML = `
+                            <a href="/OnlineShopping/product/${producto.nombre}">
                                 <img src="${producto.imagen}" alt="${producto.nombre}">
                                 <h3>${producto.nombre}</h3>
                                 <p>${producto.descripcion}</p>
-                                </a>
-                                <h4> $${producto.precio}</h4>
-                                <button class="button">Añadir al carrito</button>
-                                <button class="button">Comprar ahora</button>
-                            </div>
+                            </a>
+                            <h4>$${producto.precio}</h4>
+                            <button class="button">Añadir al carrito</button>
+                            <form id="form-comprar-${producto.idProducto}" action="/OnlineShopping/producto/${producto.idProducto}" method="get">
+                                <button type="submit" class="button">Comprar Ahora</button>
+                            </form>
                         `;
+
+                        // Agregar evento al formulario
+                        const formComprar = productoHTML.querySelector(`#form-comprar-${producto.idProducto}`);
+                        formComprar.addEventListener("submit", async function (event) {
+                            event.preventDefault(); // Evitar el envío automático del formulario
+
+                            // Verificar si el usuario está logueado
+                            const isAuthenticated = await checkAuth();
+                            if (!isAuthenticated) {
+                                alert("Debes iniciar sesión para comprar este producto.");
+                                window.location.href = "/OnlineShopping/login"; // Redirigir al login
+                                return;
+                            }
+
+                            // Si el usuario está logueado, enviar el formulario
+                            this.submit();
+                        });
+
+                        productosContainer.appendChild(productoHTML);
                     });
                 }
 
@@ -124,7 +143,6 @@
             document.addEventListener("DOMContentLoaded", function () {
                 let currentPage = 0;
                 const size = 8;
-
                 const params = new URLSearchParams(window.location.search);
                 let categoria = params.get("categoria") || "";
 
@@ -150,6 +168,7 @@
                                 return response.json();
                             })
                             .then(data => {
+                                console.log(data);
                                 if (data.content) {
                                     mostrarProductosCategoria(data.content);
                                     actualizarPaginacionCategoria(data);
@@ -173,20 +192,40 @@
                         return;
                     }
 
-
                     productos.forEach(producto => {
                         const productoHTML = document.createElement("div");
                         productoHTML.classList.add("producto-box");
+
                         productoHTML.innerHTML = `
                             <a href="/OnlineShopping/product/${producto.nombre}">
-                            <img src="${producto.imagen}" alt="${producto.nombre}">
-                            <h3>${producto.nombre}</h3>
-                            <p>${producto.descripcion}</p>
+                                <img src="${producto.imagen}" alt="${producto.nombre}">
+                                <h3>${producto.nombre}</h3>
+                                <p>${producto.descripcion}</p>
                             </a>
-                            <h4> $${producto.precio}</h4>
+                            <h4>$${producto.precio}</h4>
                             <button class="button">Añadir al carrito</button>
-                            <button class="button">Comprar ahora</button>
+                            <form id="form-comprar-${producto.idProducto}" action="/OnlineShopping/producto/${producto.idProducto}" method="get">
+                                <button type="submit" class="button">Comprar Ahora</button>
+                            </form>
                         `;
+
+                        // Agregar evento al formulario
+                        const formComprar = productoHTML.querySelector(`#form-comprar-${producto.idProducto}`);
+                        formComprar.addEventListener("submit", async function (event) {
+                            event.preventDefault(); // Evitar el envío automático del formulario
+
+                            // Verificar si el usuario está logueado
+                            const isAuthenticated = await checkAuth();
+                            if (!isAuthenticated) {
+                                alert("Debes iniciar sesión para comprar este producto.");
+                                window.location.href = "/OnlineShopping/login"; // Redirigir al login
+                                return;
+                            }
+
+                            // Si el usuario está logueado, enviar el formulario
+                            this.submit();
+                        });
+
                         productosContainer.appendChild(productoHTML);
                     });
                 }
@@ -211,6 +250,22 @@
 
                 cargarProductosCategoria();
             });
+
+
+            async function checkAuth() {
+                try {
+                    const response = await fetch("http://localhost:6060/OnlineShopping/users/check", {
+                        credentials: "include" // Incluir cookies para autenticación
+                    });
+                    const data = await response.json();
+                    return data.authenticated; // Devuelve true o false
+                } catch (error) {
+                    console.error("Error verificando autenticación:", error);
+                    return false;
+                }
+            }
         </script>
+
+        
     </body>
 </html>

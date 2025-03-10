@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Comprar ahora</title>
+        <link rel="stylesheet" href="compra.css" th:href="@{/compra.css}">
+    </head>
+    <body>
+        <div id="header_container"></div>
+
+        <div id="producto-container" class="producto-container">
+            <h1 class="product-name" id="nombre">Cargando...</h1>
+            <div class="datos-container">
+                <h4>Detalles de producto</h4>
+                <p>Marca: <span id="marca">Cargando...</span></p>
+                <p>Precio: $<span id="precio">Cargando...</span></p>
+                <p>Cantidad: <span id="cantidad">1</span></p>
+            </div>
+            <div class="envio-container">
+                <h4>Detalles de envío</h4>
+                <div class="inputs-container first">
+                    <label for="address">Dirección:</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <br>
+                <label for="postalCode" class="label">Ingresa tu código postal:</label>
+                <input type="text" id="postalCode" class="codigoPostal" placeholder="Ej: 2800" maxlength="5">
+                <button class="button" onclick="calcularCosto()">Calcular Costo de Envio</button>
+                <p id="resultado"></p>
+
+                <h5> TOTAL: $<span id="total">Cargando...</span></h5>
+            </div>
+
+            <form id="purchaseForm" class="purchaseForm">
+                <h4>Forma de pago</h4>
+                <select class="formaPago" id="formaPago">
+                    <option value="Un pago">Un pago</option>
+                    <option value="6 cuotas">6 cuotas</option>
+                    <option value="12 cuotas">12 cuotas</option>
+                </select>
+
+                <div class="inputs-container">
+                    <label for="cardNumber">Número de tarjeta:</label>
+                    <input type="text" id="cardNumber" name="cardNumber" required><br>
+                </div>
+
+                <div class="inputs-container">
+                    <label for="expirationDate">Fecha de vencimiento (MM/YY):</label>
+                    <input type="text" id="expirationDate" name="expirationDate" required pattern="\d{2}/\d{2}"><br>
+                </div>
+
+                <div class="inputs-container">
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv" required><br>
+                </div>
+
+                <button type="submit" class="button">Comprar</button>
+            </form>
+        </div>
+
+        <div id="footer_container"></div>
+        
+        <script>
+            // Obtener los datos del producto desde el backend
+            async function cargarProducto() {
+                const productoId = window.location.pathname.split("/").pop(); // Obtener el ID del producto desde la URL
+
+                try {
+                    const response = await fetch(`/OnlineShopping/buy/producto/${productoId}`, { //url corregida
+                        credentials: "include" // Incluir cookies para autenticación
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Error al cargar el producto");
+                    }
+
+                    const data = await response.json();
+                    
+                    // Mostrar los datos del producto en la página
+                    document.getElementById("nombre").textContent = data.nombre;
+                    document.getElementById("marca").textContent = data.marca;
+                    document.getElementById("precio").textContent = data.precio;
+                    document.getElementById("total").textContent = data.precio;
+                    
+                } catch (error) {
+                    console.error("Error al cargar el producto:", error);
+                    alert("No se pudo cargar el producto. Inténtalo de nuevo.");
+                }
+            
+            }
+
+        // Cargar el producto al iniciar la página
+        cargarProducto();
+
+            // Verificar autenticación del usuario
+            async function checkAuth() {
+                try {
+                    const response = await fetch("http://localhost:6060/OnlineShopping/users/check", {
+                        credentials: "include" // Incluir cookies para autenticación
+                    });
+                    const data = await response.json();
+                    return data.authenticated; // Devuelve true o false
+                } catch (error) {
+                    console.error("Error verificando autenticación:", error);
+                    return false;
+                }
+            }
+
+            document.getElementById("purchaseForm").addEventListener("submit", function (event) {
+                const expirationDate = document.getElementById("expirationDate").value;
+
+                // Validar el formato de la fecha de vencimiento
+                if (!/^\d{2}\/\d{2}$/.test(expirationDate)) {
+                    alert("La fecha de vencimiento debe tener el formato MM/YY.");
+                    event.preventDefault(); // Evitar que el formulario se envíe
+                }
+            });
+
+
+
+            // Función para enviar la compra
+            async function realizarCompra(event) {
+                event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+                const productoId = window.location.pathname.split("/").pop();
+
+                const compraDTO = {
+                    productoId: productoId,
+                    direccion: document.getElementById("address").value,
+                    codigoPostal: document.getElementById("postalCode").value,
+                    numeroTarjeta: document.getElementById("cardNumber").value,
+                    fechaVencimiento: document.getElementById("expirationDate").value,
+                    cvv: document.getElementById("cvv").value
+                };
+
+                try {
+                    const response = await fetch("http://localhost:6060/OnlineShopping/buy/comprar", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(compraDTO),
+                        credentials: "include"
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert("Compra realizada con éxito");
+                        window.location.href = "/OnlineShopping/catalogo"; // Redirigir al inicio
+                    } else {
+                        alert(data.message || "Error al realizar la compra");
+                    }
+                } catch (error) {
+                    console.error("Error al realizar la compra:", error);
+                    alert("Error al realizar la compra. Inténtalo de nuevo.");
+                }
+            }
+
+            // Asignar la función al evento submit del formulario
+            document.getElementById("purchaseForm").addEventListener("submit", realizarCompra);
+
+
+
+            // Función para calcular el costo de envío
+            function calcularCosto() {
+                const codigoPostal = document.getElementById("postalCode").value.trim();
+
+                // Validar que el código postal tenga 5 dígitos
+                if (!/^\d{4}$/.test(codigoPostal)) {
+                    document.getElementById("resultado").textContent = "Código postal inválido. Debe tener 4 dígitos.";
+                    return;
+                }
+
+                // Simular el cálculo del costo de envío
+                let costoEnvio;
+                switch (codigoPostal.substring(0, 2)) {
+                    case "11":
+                        costoEnvio = 2000.00;
+                        break;
+                    case "55":
+                        costoEnvio = 4000.00;
+                        break;
+                    case "50":
+                        costoEnvio = 3500.00;
+                        break;
+                    case "20":
+                        costoEnvio = 2500.00;
+                        break;
+                    case "46":
+                        costoEnvio = 8000.00;
+                        break;
+                    case "32":
+                        costoEnvio = 4500.00;
+                        break;
+                    default:
+                        costoEnvio = 5000.00; // Costo por defecto
+                }
+
+                // Mostrar el costo de envío
+                document.getElementById("resultado").textContent = `El costo de envío es: $${costoEnvio}`;
+
+                // Calcular el total (precio del producto + costo de envío)
+                const precioProducto = parseFloat(document.getElementById("precio").textContent);
+                const total = precioProducto + costoEnvio;
+                document.getElementById("total").textContent = total;
+            }
+        </script>
+
+        <script>
+            // Función para cargar el archivo header.html
+           document.addEventListener("DOMContentLoaded", function () {
+                fetch('/OnlineShopping/headerSimple')
+                        .then(response => response.text())
+                        .then(data => {
+                            let footerContainer = document.getElementById('header_container');
+                            if (footerContainer) {
+                                footerContainer.innerHTML = data;
+                            } else {
+                                console.error("No se encontró el contenedor del header.");
+                            }
+                        })
+                        .catch(error => console.error("Error al cargar el header:", error));
+            });
+                    
+                    
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch('/OnlineShopping/footer')
+                        .then(response => response.text())
+                        .then(data => {
+                            let footerContainer = document.getElementById('footer_container');
+                            if (footerContainer) {
+                                footerContainer.innerHTML = data;
+                            } else {
+                                console.error("No se encontró el contenedor del footer.");
+                            }
+                        })
+                        .catch(error => console.error("Error al cargar el footer:", error));
+            });        
+        </script>
+    </body>
+</html>

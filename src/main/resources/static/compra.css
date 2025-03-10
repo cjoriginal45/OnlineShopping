@@ -1,0 +1,149 @@
+:root {
+    --color-main: #feaf6b;
+    --color-body: #6b50ef;
+    --color-suave: color-mix(in srgb, #1b0783 70%, white 30%);
+    --color-fuerte: color-mix(in srgb, #1b0783 50%, black 50%);
+    --color-main-fuerte: #fb9c4a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: var(--color-body);
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.producto-container {
+    background-color: white;
+    padding: 10px 40px;
+    border-radius: 30px;
+    width: 50vw;
+    height: 112vh;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    align-self: center;
+    color: var(--color-fuerte);
+    margin: 0;
+}
+
+p {
+    color: black;
+    margin: 7px;
+}
+
+h4 {
+    color: var(--color-fuerte);
+    margin-left: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 17px;
+}
+
+h5{
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.codigoPostal, input {
+    border: 1px solid grey;
+    border-radius: 10px;
+    padding: 4px;
+    font-size: 16px;
+    width: 40%;
+}
+
+
+.codigoPostal:focus, input:focus {
+    border-color: var(--color-fuerte);
+    outline: none;
+}
+
+.button {
+    background-color: var(--color-fuerte);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    margin: auto;
+    padding: 4px;
+}
+
+.button:last-child {
+    height: 45px;
+    width: 150px;
+    margin-left: 50px;
+}
+
+.button:hover {
+    background-color: white;
+    color: var(--color-fuerte);
+    border: 1px solid var(--color-fuerte);
+}
+
+.purchaseForm, .envio-container, .datos-container {
+    border: 1px solid #d2d1d1ee;
+    height: max-content;
+}
+
+.datos-container{
+    border-radius: 20px 20px 0 0;
+}
+
+.envio-container{
+    height:70%;
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs-container.first {
+    display: flex;
+    flex-direction: row; /* Elementos en línea */
+    align-items: center; /* Alineación vertical */
+    gap: 10px; /* Espacio entre label e input */
+    width: 100%; /* Ancho completo */
+}
+
+/* Asegúrate de que el input no tenga un width muy pequeño */
+.inputs-container.first input {
+    flex: 1; /* Ocupa el espacio restante */
+    max-width: 300px; /* Ancho máximo opcional */
+}
+
+.formaPago {
+    margin: 10px;
+    padding: 5px 10px;
+    height: auto;
+    background-color: white;
+    color: var(--color-fuerte);
+    border: 1px solid var(--color-fuerte);
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 40%;
+}
+
+option:hover {
+    background-color: var(--color-main-fuerte);
+}
+
+.formaPago:hover {
+    background-color: var(--color-fuerte);
+    color: white;
+}
+
+.purchaseForm{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    border-radius: 0 0 20px 20px;
+}

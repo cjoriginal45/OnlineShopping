@@ -5,6 +5,7 @@ import com.ecommerce.OnlineShopping.models.Marca;
 
 public final class DetallesProductoDTO {
 
+    private int id;
     private String nombre;
     private double precio;
     private int garantia;
@@ -18,7 +19,8 @@ public final class DetallesProductoDTO {
     private String imagenMarca;
     private String descripcion;
 
-    public DetallesProductoDTO(String nombre, double precio, int garantia, String marca, String modelo, String color, String origen, String categoria, Integer stock, String imagen, String descripcion) {
+    public DetallesProductoDTO(int id, String nombre, double precio, int garantia, String marca, String modelo, String color, String origen, String categoria, Integer stock, String imagen, String descripcion) {
+        this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.garantia = garantia;
@@ -44,6 +46,15 @@ public final class DetallesProductoDTO {
         this.imagenMarca = imagenMarca;
         this.descripcion = descripcion;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
 
     public String getNombre() {
         return nombre;

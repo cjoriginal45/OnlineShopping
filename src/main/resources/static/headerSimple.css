@@ -1,0 +1,79 @@
+/* Reseteamos los márgenes y el padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-body);
+    margin: 0;
+    --color-header: #feaf6b;
+    --color-body: #6b50ef;
+    --color-suave:color-mix(in srgb, #1b0783 70%, white 30%);
+    --color-fuerte:color-mix(in srgb,#1b0783 50%, black 50%);
+}
+
+.custom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--color-header);
+    color: white;
+    position:static;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    max-width: 100vw; /* Asegura que el header no se desborde */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* Para asegurarse de que no se agregue espacio adicional */
+    flex-wrap: wrap;
+}
+
+/* Logo */
+.custom-header__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.custom-header__logo img {
+    margin-right: 10px;
+    max-width: 70dvw;
+    max-height: 14dvh;
+}
+
+.custom-header__nav{
+    margin: 10px;
+}
+
+.custom-header__nav a {
+    color: var(--color-fuerte);
+    text-decoration: none;
+    padding: 10px 20px;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 30px;
+    margin-right: 20px; /* Agrega espacio entre los enlaces */
+}
+
+/* El último enlace no tendrá margen derecho */
+.custom-header__nav a:last-child {
+    margin-right: 0;
+}
+
+
+
+.custom-header__nav a:hover {
+    background-color: var(--color-fuerte);
+    color: var(--color-header);
+    padding: 20px;
+    text-decoration: none;
+    border-radius: 30px;
+}
+
+

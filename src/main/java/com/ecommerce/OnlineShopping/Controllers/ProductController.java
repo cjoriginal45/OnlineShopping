@@ -69,6 +69,7 @@ public class ProductController {
             if (producto.isPresent()) {
                 DetallesProductoDTO detallesDTO;
                 detallesDTO = new DetallesProductoDTO(
+                        producto.get().getIdProducto(),
                         producto.get().getNombre(),
                         producto.get().getPrecio(),
                         producto.get().getGarantia(),

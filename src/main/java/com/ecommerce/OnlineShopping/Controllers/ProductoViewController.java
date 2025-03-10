@@ -28,4 +28,17 @@ public class ProductoViewController {
             return "error/404"; // Redirige a la página de error si no se encuentra el producto
         }
     }
+    
+    @GetMapping("/{id}")
+    public String getProductoIdHtml(@PathVariable Integer id, Model model) {
+        // Buscar el producto por nombre
+        Optional<Producto> producto = productService.obtenerPorId(id);
+        
+        if (producto.isPresent()) {
+            model.addAttribute("producto", producto.get()); // Agrega el producto al modelo
+            return "compra"; // Retorna la vista "producto.html"
+        } else {
+            return "error/404"; // Redirige a la página de error si no se encuentra el producto
+        }
+    }
 }

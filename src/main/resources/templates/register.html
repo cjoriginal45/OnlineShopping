@@ -8,16 +8,7 @@
     </head>
 
     <body>
-        <header class="custom-header">
-            <a href="#" class="custom-header__logo">
-                <img src="logo.png" alt="Logo">
-            </a>
-            <nav class="custom-header__nav">
-                <a href="#/OnlineShopping/principal">Inicio</a>
-                <a href="#contacto">Contacto</a>
-                <a href="#acerca">Acerca</a>
-            </nav>
-        </header>
+        <div id="header_container"></div>
         <main>
             <div class="form">
                 <h1>¿Sos nuevo?</h1>
@@ -113,6 +104,18 @@
                         });
 
             });
+        </script>
+        
+        <script>
+            // Función para cargar el archivo header.html
+            fetch('/OnlineShopping/headerSimple')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('header_container').innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error("Error al cargar el header:", error);
+                    });
         </script>
 
     </body>
