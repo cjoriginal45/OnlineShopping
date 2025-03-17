@@ -4,9 +4,10 @@ import com.ecommerce.OnlineShopping.Services.UserService;
 import com.ecommerce.OnlineShopping.models.LoginRequest;
 import com.ecommerce.OnlineShopping.DTO.RegisterRequestDTO;
 import com.ecommerce.OnlineShopping.models.Usuario;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public ResponseEntity<?> getUsers() {
@@ -35,7 +39,13 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDTO registerRequest) {
+
         try {
+            //hashing de la constraseña
+            Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+            String hash = argon2.hash(1, 1024, 1, registerRequest.getPassword());
+            registerRequest.setPassword(hash);
+            
             userService.registerUser(registerRequest);
             return ResponseEntity.ok("Registro exitoso");
         } catch (Exception e) {
@@ -46,11 +56,12 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest httpRequest) {
-        boolean isAuthenticated = userService.authenticate(loginRequest.getNombre(), loginRequest.getEmail(), loginRequest.getPassword());
-        Map<String, Object> response = new HashMap<>();
-        response.put("authenticated", isAuthenticated);
-
-        if (isAuthenticated) {
+        boolean isAuthenticated = userService.authenticate(loginRequest.getNombre(), loginRequest.getEmail());
+        
+        Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+        boolean hash = argon2.verify(userService.verificarPassword(loginRequest.getEmail()), loginRequest.getPassword());
+        
+        if (isAuthenticated && hash) {
             HttpSession session = httpRequest.getSession();
             session.setAttribute("user", loginRequest.getNombre());
             return ResponseEntity.ok().body(Map.of("authenticated", true));
@@ -65,13 +76,10 @@ public class UserController {
         HttpSession session = request.getSession(false);
         boolean isAuthenticated = (session != null && session.getAttribute("user") != null);
 
-        // Logs para depuración
-        System.out.println("Sesión existe: " + (session != null));
-        if (session != null) {
-            System.out.println("Usuario en sesión: " + session.getAttribute("user"));
-        }
-
+        if(isAuthenticated){
         return ResponseEntity.ok(Map.of("authenticated", isAuthenticated));
+        } 
+        return ResponseEntity.status(401).body(Map.of("authenticated", false));
     }
 
 }

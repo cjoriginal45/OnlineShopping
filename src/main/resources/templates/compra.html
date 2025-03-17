@@ -60,39 +60,53 @@
         </div>
 
         <div id="footer_container"></div>
-        
+
         <script>
-            // Obtener los datos del producto desde el backend
+            // Función para cargar el producto (unificada)
             async function cargarProducto() {
-                const productoId = window.location.pathname.split("/").pop(); // Obtener el ID del producto desde la URL
+                // Obtener el último segmento de la URL
+                const pathname = window.location.pathname;
+                const pathParts = pathname.split("/");
+                const segmento = decodeURIComponent(pathParts[pathParts.length - 1]); // Último segmento
 
                 try {
-                    const response = await fetch(`/OnlineShopping/buy/producto/${productoId}`, { //url corregida
+                    let url;
+                    if (!isNaN(segmento)) { // Si es un número (ID)
+                        url = `/OnlineShopping/buy/producto/${segmento}`;
+                    } else { // Si es un modelo
+                        url = `/OnlineShopping/buy/producto/modelo/${segmento}`;
+                    }
+
+                    // Hacer la solicitud al backend
+                    const response = await fetch(url, {
                         credentials: "include" // Incluir cookies para autenticación
                     });
 
                     if (!response.ok) {
-                        throw new Error("Error al cargar el producto");
+                        if (response.status === 404) {
+                            throw new Error("Producto no encontrado");
+                        } else {
+                            throw new Error(`Error al cargar el producto: ${response.statusText}`);
+                        }
                     }
 
                     const data = await response.json();
-                    
+                    console.log("Respuesta del servidor:", data);
+
                     // Mostrar los datos del producto en la página
                     document.getElementById("nombre").textContent = data.nombre;
                     document.getElementById("marca").textContent = data.marca;
                     document.getElementById("precio").textContent = data.precio;
                     document.getElementById("total").textContent = data.precio;
-                    
+
                 } catch (error) {
                     console.error("Error al cargar el producto:", error);
-                    alert("No se pudo cargar el producto. Inténtalo de nuevo.");
+                    alert(error.message); // Mostrar el mensaje de error al usuario
                 }
-            
             }
 
-        // Cargar el producto al iniciar la página
-        cargarProducto();
-
+            // Cargar el producto al iniciar la página
+            cargarProducto();
             // Verificar autenticación del usuario
             async function checkAuth() {
                 try {
@@ -124,15 +138,27 @@
                 event.preventDefault(); // Evitar que el formulario se envíe automáticamente
 
                 const productoId = window.location.pathname.split("/").pop();
+                let compraDTO;
 
-                const compraDTO = {
-                    productoId: productoId,
-                    direccion: document.getElementById("address").value,
-                    codigoPostal: document.getElementById("postalCode").value,
-                    numeroTarjeta: document.getElementById("cardNumber").value,
-                    fechaVencimiento: document.getElementById("expirationDate").value,
-                    cvv: document.getElementById("cvv").value
-                };
+                if (!isNaN(productoId)) { // Si es un número
+                    compraDTO = {
+                        productoId: parseInt(productoId, 10), // Convertir a entero
+                        direccion: document.getElementById("address").value,
+                        codigoPostal: document.getElementById("postalCode").value,
+                        numeroTarjeta: document.getElementById("cardNumber").value,
+                        fechaVencimiento: document.getElementById("expirationDate").value,
+                        cvv: document.getElementById("cvv").value
+                    };
+                } else { // Si no es un número (es un modelo o cadena)
+                    compraDTO = {
+                        direccion: document.getElementById("address").value,
+                        codigoPostal: document.getElementById("postalCode").value,
+                        numeroTarjeta: document.getElementById("cardNumber").value,
+                        fechaVencimiento: document.getElementById("expirationDate").value,
+                        cvv: document.getElementById("cvv").value
+                    };
+                }
+
 
                 try {
                     const response = await fetch("http://localhost:6060/OnlineShopping/buy/comprar", {
@@ -210,7 +236,7 @@
 
         <script>
             // Función para cargar el archivo header.html
-           document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function () {
                 fetch('/OnlineShopping/headerSimple')
                         .then(response => response.text())
                         .then(data => {
@@ -223,8 +249,8 @@
                         })
                         .catch(error => console.error("Error al cargar el header:", error));
             });
-                    
-                    
+
+
             document.addEventListener("DOMContentLoaded", function () {
                 fetch('/OnlineShopping/footer')
                         .then(response => response.text())
@@ -237,7 +263,7 @@
                             }
                         })
                         .catch(error => console.error("Error al cargar el footer:", error));
-            });        
+            });
         </script>
     </body>
 </html>

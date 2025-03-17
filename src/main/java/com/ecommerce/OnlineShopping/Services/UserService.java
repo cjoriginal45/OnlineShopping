@@ -5,27 +5,20 @@ import com.ecommerce.OnlineShopping.models.Administrador;
 import com.ecommerce.OnlineShopping.models.Cliente;
 import com.ecommerce.OnlineShopping.DTO.RegisterRequestDTO;
 import com.ecommerce.OnlineShopping.models.Usuario;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder;
-
-    public UserService() {
-        this.passwordEncoder = new BCryptPasswordEncoder();
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
+
 
     public boolean createUser(Usuario user) {
 
@@ -44,20 +37,14 @@ public class UserService {
         return true;
     }
 
-    public boolean authenticate(String nombre, String email, String password) {
+    public boolean authenticate(String nombre, String email) {
         Optional<Usuario> user = userRepository.findByNombreAndEmail(nombre, email);
 
-        if (user.isPresent()) {
-            
-            Usuario usuario = user.get();
-            // Aquí podrías comparar la contraseña con la que está almacenada, utilizando BCrypt u otro método seguro.
-            if (usuario.getPassword().equals(password)) {
-                return true; // Contraseña correcta
-            } else {
-                return false; // Contraseña incorrecta
-            }
-        }
-        return false; // Retorna `false` si no se encuentra el usuario o las contraseñas no coinciden.
+        return user.isPresent();
+    }
+    
+    public String verificarPassword(String email){
+        return userRepository.findPassword(email);
     }
 
     public boolean createAdmin(Administrador admin, Usuario currentUser) {

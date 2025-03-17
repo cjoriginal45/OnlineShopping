@@ -14,8 +14,19 @@ public class CompraDTO {
     private String cvv;
     private String  fechaVencimiento;
 
+    public CompraDTO() {
+    }
+
     public CompraDTO(Integer productoId, String direccion, String codigoPostal, String numeroTarjeta, String cvv, String fechaVencimiento) {
         this.productoId = productoId;
+        this.direccion = direccion;
+        this.codigoPostal = codigoPostal;
+        this.numeroTarjeta = numeroTarjeta;
+        this.cvv = cvv;
+        this.fechaVencimiento = fechaVencimiento;
+    }
+
+    public CompraDTO(String direccion, String codigoPostal, String numeroTarjeta, String cvv, String fechaVencimiento) {
         this.direccion = direccion;
         this.codigoPostal = codigoPostal;
         this.numeroTarjeta = numeroTarjeta;

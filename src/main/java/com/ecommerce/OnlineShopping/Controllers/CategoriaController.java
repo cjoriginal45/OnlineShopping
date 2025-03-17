@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/categorias")
 public class CategoriaController {
     
-    @Autowired
-    private CategoriaService categoriaService;
+    private final CategoriaService categoriaService;
+
+    public CategoriaController(CategoriaService categoriaService) {
+        this.categoriaService = categoriaService;
+    }
 
     @GetMapping("/verificar")
     public boolean verificarCategoria(@RequestParam String nombre) {

@@ -54,6 +54,11 @@ public class WebController {
         return "producto";
     }
     
+    @GetMapping("/product/name/{modelo}")
+    public String getProductName(){
+        return "compra";
+    }
+    
     @GetMapping("/producto/{id}")
     public String getProducto(){
         return "compra";

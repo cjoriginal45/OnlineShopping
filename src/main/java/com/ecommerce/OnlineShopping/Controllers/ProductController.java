@@ -5,7 +5,6 @@ import com.ecommerce.OnlineShopping.Repositories.MarcaRepository;
 import com.ecommerce.OnlineShopping.Services.ProductService;
 import com.ecommerce.OnlineShopping.models.Producto;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/products")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    private final  ProductService productService;
+
+    private final MarcaRepository marcaRepository;
+
+    public ProductController(ProductService productService, MarcaRepository marcaRepository) {
+        this.productService = productService;
+        this.marcaRepository = marcaRepository;
+    }
     
-    @Autowired
-    private MarcaRepository marcaRepository;
 
     @GetMapping("/api/catalogo")
     public ResponseEntity<Page<Producto>> listarProductos(

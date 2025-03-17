@@ -18,8 +18,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/users/cliente")
 public class ClienteController {
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+
+    public ClienteController(UserService userService) {
+        this.userService = userService;
+    }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")

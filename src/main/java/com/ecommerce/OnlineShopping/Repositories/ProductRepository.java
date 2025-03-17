@@ -24,6 +24,9 @@ public interface ProductRepository extends JpaRepository<Producto, Integer> {
     @Override
     Optional<Producto> findById(Integer idProducto);
 
-    @Query("SELECT p FROM Producto p WHERE LOWER(p.nombre) = LOWER(:nombre)")
+    @Query("SELECT p FROM Producto p WHERE LOWER(REPLACE(p.nombre, '\"', '')) = LOWER(REPLACE(:nombre, '\"', ''))")
     Optional<Producto> findByName(@Param("nombre") String name);
+
+    @Query("SELECT p FROM Producto p WHERE LOWER(TRIM(p.modelo)) = LOWER(TRIM(:modelo))")
+    Optional<Producto> findByModelo(@Param("modelo") String modelo);
 }
